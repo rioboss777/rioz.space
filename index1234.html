@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="rioz.space — визитка" />
+  <title>rioz.space</title>
+
+  <style>
+    :root{
+      --bg:#07090c;
+      --card:#0e131a;
+      --text:#eaf0ff;
+      --muted:#9aa6b6;
+      --line:rgba(255,255,255,.07);
+
+      --a1:#7aa2ff;
+      --a2:#9b7bff;
+      --a3:#64ffd5;
+
+      --mx: 50vw;
+      --my: 30vh;
+
+      --shadow: 0 30px 90px rgba(0,0,0,.55);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:var(--text);
+      background: var(--bg);
+      overflow-x:hidden;
+    }
+
+    /* Цвет под курсором (вся страница) */
+    .cursor-glow{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(800px 520px at var(--mx) var(--my), rgba(122,162,255,.22), transparent 55%),
+        radial-gradient(700px 480px at calc(var(--mx) + 12vw) calc(var(--my) + 10vh), rgba(100,255,213,.14), transparent 60%),
+        radial-gradient(650px 450px at calc(var(--mx) - 16vw) calc(var(--my) + 6vh), rgba(155,123,255,.12), transparent 62%);
+      filter: saturate(1.15);
+      transition: background .08s linear;
+    }
+
+    /* Лёгкая “пыль/грейн” */
+    .grain{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity:.12;
+      mix-blend-mode: overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .wrap{
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding: 38px 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card{
+      width: min(960px, 100%);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(14,19,26,.92), rgba(14,19,26,.78));
+      border: 1px solid rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+
+    /* тонкая цветная кайма */
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius: inherit;
+      padding:1px;
+      background: linear-gradient(90deg, rgba(122,162,255,.35), rgba(155,123,255,.25), rgba(100,255,213,.25));
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      opacity:.7;
+      pointer-events:none;
+    }
+
+    .inner{
+      padding: clamp(22px, 4vw, 48px);
+      display:grid;
+      gap: 26px;
+    }
+
+    .hero{
+      text-align:center;
+      display:grid;
+      gap: 10px;
+      padding-top: 6px;
+    }
+
+    .kicker{
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: .22em;
+      text-transform: lowercase;
+    }
+
+    .name{
+      margin:0;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      font-size: clamp(48px, 7.2vw, 84px);
+      line-height: 1.0;
+      position: relative;
+    }
+
+    .name .z{
+      background: linear-gradient(90deg, var(--a1), var(--a2), var(--a3));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 28px rgba(122,162,255,.18);
+    }
+
+    .role{
+      margin:0;
+      color: var(--muted);
+      font-size: clamp(16px, 2.1vw, 20px);
+    }
+
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      margin: 4px 0;
+    }
+
+    .section-title{
+      margin:0;
+      text-align:center;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing:.18em;
+      text-transform: uppercase;
+    }
+
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      margin-top: 12px;
+    }
+
+    .tag{
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
+      user-select:none;
+    }
+
+    .tag:hover{
+      transform: translateY(-2px);
+      border-color: rgba(122,162,255,.35);
+      background: rgba(122,162,255,.06);
+      filter: saturate(1.12);
+    }
+
+    .contacts{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:12px;
+      margin-top: 12px;
+    }
+
+    .btn{
+      position: relative;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      text-decoration:none;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, filter .18s ease;
+      outline:none;
+    }
+
+    .btn .emoji{ filter: drop-shadow(0 0 10px rgba(122,162,255,.12)); }
+    .btn .meta{
+      display:grid;
+      line-height: 1.05;
+    }
+    .btn .meta b{
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .01em;
+    }
+    .btn .meta span{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .btn::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius: inherit;
+      background: radial-gradient(240px 120px at 30% 20%, rgba(122,162,255,.18), transparent 60%);
+      opacity:0;
+      transition: opacity .18s ease;
+      pointer-events:none;
+    }
+
+    .btn:hover{
+      transform: translateY(-2px);
+      border-color: rgba(122,162,255,.35);
+      background: rgba(122,162,255,.06);
+      filter: saturate(1.12);
+    }
+    .btn:hover::after{ opacity:1; }
+    .btn:focus-visible{ box-shadow: 0 0 0 3px rgba(122,162,255,.25); }
+
+    .copy{
+      cursor: pointer;
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      background: rgba(14,19,26,.92);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: var(--text);
+      box-shadow: 0 14px 40px rgba(0,0,0,.45);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 10;
+      font-size: 13px;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .foot{
+      text-align:center;
+      font-size: 12px;
+      color: rgba(154,166,182,.85);
+      margin-top: -10px;
+    }
+
+    @media (prefers-reduced-motion: no-preference){
+      .card{ animation: pop .55s ease both; }
+      @keyframes pop{
+        from{ opacity:0; transform: translateY(10px) scale(.985); }
+        to{ opacity:1; transform: translateY(0) scale(1); }
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <section class="card" aria-label="rioz.space визитка">
+      <div class="inner">
+
+        <header class="hero">
+          <div class="kicker">welcome to rioz.space</div>
+          <h1 class="name">rio<span class="z">Z</span></h1>
+          <p class="role">a 1C Developer</p>
+        </header>
+
+        <div class="divider" role="separator" aria-hidden="true"></div>
+
+        <section aria-label="Языки">
+          <h2 class="section-title">skills</h2>
+          <div class="tags" role="list">
+            <div class="tag" role="listitem">1C программист</div>
+            <div class="tag" role="listitem">Go lang</div>
+            <div class="tag" role="listitem">Python</div>
+            <div class="tag" role="listitem">C#</div>
+          </div>
+        </section>
+
+        <div class="divider" role="separator" aria-hidden="true"></div>
+
+        <section aria-label="Контакты">
+          <h2 class="section-title">contacts</h2>
+
+          <nav class="contacts" aria-label="Ссылки">
+            <a class="btn" href="https://t.me/rioboss777" target="_blank" rel="noopener noreferrer">
+              <span class="emoji">✈️</span>
+              <span class="meta">
+                <b>Telegram</b>
+                <span>@rioboss777</span>
+              </span>
+            </a>
+
+            <!-- Discord: кликабельно + копирование ника -->
+            <a class="btn copy" href="https://discord.com/" target="_blank" rel="noopener noreferrer" data-copy="rionel1337">
+              <span class="emoji">🎮</span>
+              <span class="meta">
+                <b>Discord</b>
+                <span>rionel1337 (copy)</span>
+              </span>
+            </a>
+
+            <a class="btn" href="https://github.com/rioboss777" target="_blank" rel="noopener noreferrer">
+              <span class="emoji">🐙</span>
+              <span class="meta">
+                <b>GitHub</b>
+                <span>/rioboss777</span>
+              </span>
+            </a>
+          </nav>
+
+          <div class="foot">© rioz.space</div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Цвет под курсором
+    const root = document.documentElement;
+    window.addEventListener("mousemove", (e) => {
+      root.style.setProperty("--mx", e.clientX + "px");
+      root.style.setProperty("--my", e.clientY + "px");
+    }, { passive: true });
+
+    // Copy для Discord ника
+    const toast = document.getElementById("toast");
+    function showToast(text){
+      toast.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(showToast.t);
+      showToast.t = setTimeout(() => toast.classList.remove("show"), 1400);
+    }
+
+    document.querySelectorAll("[data-copy]").forEach(el => {
+      el.addEventListener("click", async (e) => {
+        // чтобы и открылся discord, и скопировалось — не мешаем переходу
+        const val = el.getAttribute("data-copy");
+        try{
+          await navigator.clipboard.writeText(val);
+          showToast("Скопировано: " + val);
+        }catch{
+          showToast("Не удалось скопировать 😢");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
